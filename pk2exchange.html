@@ -2,9 +2,9 @@
 <title>PK2 Exchange</title>
 <style>
 body, *{background-color:#111;color:#ccd}
-#input {background-color:#333;height:240px;width:500px;border:solid 1px #888}
-#output{background-color:#333;min-height:1.2em;width:500px;border:solid 1px #888;margin-top:2px}
-#button {background-color:#444;border:solid 1px #666;text-align:center;height:1.2em;width:500px}
+#input {background-color:#333;height:240px;width:700px;border:solid 1px #888}
+#output{background-color:#333;min-height:1.2em;width:700px;border:solid 1px #888;margin-top:2px}
+#button {background-color:#444;border:solid 1px #666;text-align:center;height:1.2em;width:700px}
 </style>
 </head><body>
 <h1>
@@ -18,7 +18,7 @@ Copy and paste one or more lines from your list here, and click the button to ge
 document.getElementById("button").onclick=function(){
 	document.getElementById("output").innerHTML="";
 	var s=document.getElementById("input").value;
-  var a=12,i=0;
+  var a=16,i=0;
   var command="p!t a"
   for(var s2 of s.match(/^\s*\d+/gmi)){
     i++;
