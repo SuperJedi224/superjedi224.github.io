@@ -24,7 +24,7 @@ document.getElementById("button").onclick=function(){
     i++;
   	command+=" ";
     command+=s2.match(/\d+/g)[0];
-    if(i>=a){i=0;document.getElementById("output").innerHTML=command+"<br/>";command="p!t a"}
+    if(i>=a){i=0;document.getElementById("output").innerHTML+=command+"<br/>";command="p!t a"}
   }
   if(i!=0)document.getElementById("output").innerHTML+=command;
 }
