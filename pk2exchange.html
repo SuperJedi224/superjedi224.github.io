@@ -1,0 +1,31 @@
+<html><head>
+<title>Pokétwo Exchange</title>
+<style>
+body, *{background-color:#111;color:#ccd}
+#input {background-color:#333;height:240px;width:500px;border:solid 1px #888}
+#output{background-color:#333;min-height:1.2em;width:500px;border:solid 1px #888;margin-top:2px}
+#button {background-color:#444;border:solid 1px #666;text-align:center;height:1.2em;width:500px}
+</style>
+</head><body>
+<h1>
+Pok&eacute;two Exchange
+</h1>
+<textarea id="input"></textarea>
+<div id="button">Generate Command</div>
+<div id="output"></div>
+<script>
+document.getElementById("button").onclick=function(){
+	document.getElementById("output").innerHTML="";
+	var s=document.getElementById("input").value;
+  var a=12,i=0;
+  var command="p!t a"
+  for(var s2 of s.match(/^\s*\d+/gmi)){
+    i++;
+  	command+=" ";
+    command+=s2.match(/\d+/g)[0];
+    if(i>=a){i=0;document.getElementById("output").innerHTML=command+"<br/>";command="p!t a"}
+  }
+  if(i!=0)document.getElementById("output").innerHTML+=command;
+}
+</script>
+</body></html>
