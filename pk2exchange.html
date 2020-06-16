@@ -14,19 +14,21 @@ Copy and paste one or more lines from your list here, and click the button to ge
 <textarea id="input"></textarea>
 <div id="button">Generate Command</div>
 <div id="output"></div>
+<div id="total"></div>
 <script>
 document.getElementById("button").onclick=function(){
 	document.getElementById("output").innerHTML="";
 	var s=document.getElementById("input").value;
-  var a=18,i=0;
+  var a=18,i=0,t=0;
   var command="p!t a"
   for(var s2 of s.match(/^\s*\d+/gmi)){
-    i++;
+    i++;t++;
   	command+=" ";
     command+=s2.match(/\d+/g)[0];
     if(i>=a){i=0;document.getElementById("output").innerHTML+=command+"<br/>";command="p!t a"}
   }
   if(i!=0)document.getElementById("output").innerHTML+=command;
+  document.getElementById("total").innerHTML="You have added "+t+" mons to this trade.";
 }
 </script>
 </body></html>
