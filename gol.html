@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<title>Toroidal Game of Life Simulation</title>
+<head>
+</head>
+<body>
+<canvas id="c" width="600" height="600"></canvas>
+<div id="data"></div>
+<form method="get" action="gol.html">
+</form>
+<script>
+function format(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+var url={};
+if(location.search!=""){
+    var t1=location.search.substring(1).split("&");
+    for(var i=0;i<t1.length;i++){
+        var t2=t1[i].split("=");
+        if(t2.length!=2)continue ;
+        url[t2[0]]=t2[1];
+    }
+};
+var p=Number(url.percent)||0
+var t=Number(url.time)||20;
+
+var a=[],n=0;
+for(var i=0;i<200;i++){
+    a[i]=[];
+    for(var j=0;j<200;j++){
+        a[i][j]=Math.min(1,Math.random()<p/100);
+    }
+}
+if(!p){
+    for(var k=0,d=13+Math.ceil(10*Math.random());k<d;k++){
+        [box,beacon,blinker,glider,glider,hive,toad][Math.floor(7*Math.random())](Math.floor(200*Math.random()),Math.floor(200*Math.random()))
+    }
+}
+function box(x,y){
+    x=Math.floor(x);y=Math.floor(y);
+    x+=200;y+=200;
+    x%=200;y%=200;
+    a[x][y]=1;
+    a[x][(y+1)%200]=1;
+    a[(x+1)%200][(y+1)%200]=1;
+    a[(x+1)%200][y]=1;
+}
+function hive(x,y){
+    x=Math.floor(x);y=Math.floor(y);
+    x+=200;y+=200;
+    x%=200;y%=200;
+    a[(x+1)%200][y]=1;
+    a[x][(y+1)%200]=1;
+    a[(x+2)%200][(y+1)%200]=1;
+    a[x][(y+2)%200]=1;
+    a[(x+2)%200][(y+2)%200]=1;
+    a[(x+1)%200][(y+3)%200]=1;
+}
+function glider(x,y){
+    x=Math.floor(x);y=Math.floor(y);
+    x+=200;y+=200;
+    x%=200;y%=200;
+    [g1,g2,g3,g4][Math.floor(Math.random()*4)](x,y);
+}
+function g1(x,y){
+    a[x][y]=1;
+    a[(x+1)%200][y]=1;
+    a[(x+2)%200][y]=1;
+    a[(x+2)%200][(y+1)%200]=1;
+    a[(x+1)%200][(y+2)%200]=1;
+}
+function g2(x,y){
+    a[x][y]=1;
+    a[(x+1)%200][y]=1;
+    a[(x+2)%200][y]=1;
+    a[(x+2)%200][(y+199)%200]=1;
+    a[(x+1)%200][(y+198)%200]=1;    
+}
+function g3(x,y){
+    a[x][y]=1;
+    a[(x+199)%200][y]=1;
+    a[(x+198)%200][y]=1;
+    a[(x+198)%200][(y+1)%200]=1;
+    a[(x+199)%200][(y+2)%200]=1;    
+}
+function g4(x,y){
+    a[x][y]=1;
+    a[(x+199)%200][y]=1;
+    a[(x+198)%200][y]=1;
+    a[(x+198)%200][(y+199)%200]=1;
+    a[(x+199)%200][(y+198)%200]=1;    
+}
+function toad(x,y){
+    x=Math.floor(x);y=Math.floor(y);
+    x+=200;y+=200;
+    x%=200;y%=200;
+    a[x][y]=1;
+    a[(x+1)%200][y]=1;
+    a[(x+2)%200][y]=1;
+    a[(x+1)%200][(y+1)%200]=1;
+    a[(x+2)%200][(y+1)%200]=1;
+    a[(x+3)%200][(y+1)%200]=1;
+}
+function beacon(x,y){
+    box(x,y);
+    Math.random()<0.4?box(x+2,y+2):box(x-2,y+2);
+}
+function blinker(x,y){
+    a[x][y]=1;
+    a[(x+1)%200][y]=1;
+    a[(x+2)%200][y]=1;
+}
+var ctx=document.getElementById("c").getContext("2d");
+function render(){
+    var b=[],g=0;
+    for(var i=0;i<200;i++){
+        b[i]=[];
+    }
+    ctx.fillStyle="#DDD";
+    ctx.fillRect(0,0,600,600);
+    for(var i=0;i<200;i++){
+        for(var j=0;j<200;j++){
+            if(a[i][j]){
+                ctx.fillStyle="#008";
+                ctx.fillRect(i*3,j*3,3,3);
+                ctx.fillStyle="#A08";
+                ctx.fillRect(i*3+1,j*3+1,1,1)
+            }else{
+                ctx.fillStyle="#CCC";
+                ctx.fillRect(i*3+1,j*3+1,1,1)
+            }
+            var c=a[i][(j+1)%200]+
+                a[(i+1)%200][j]+
+                a[(199+i)%200][j]+
+                a[i][(199+j)%200]+
+                a[(i+1)%200][(199+j)%200]+
+                a[(199+i)%200][(j+1)%200]+
+                a[(199+i)%200][(199+j)%200]+
+                a[(i+1)%200][(j+1)%200];
+            b[i][j]=a[i][j]?(g++,1<c&&c<4):(c==3);
+        }
+    }
+    a=b;
+    document.getElementById("data").innerHTML="Generation "+format(n)+"; "+format(g)+" live cells."
+    n++;
+    setTimeout(render,t);
+}
+render();
+</script>
+</body>
+</html>
